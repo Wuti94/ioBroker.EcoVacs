@@ -100,14 +100,15 @@ class Template extends utils.Adapter {
             vacbot.on("BatteryInfo", (battery) => {
               this.log.info("Battery level: " + battery * 100);
             });
-
           });
           vacbot.connect_and_wait_until_ready();
         });
       }).catch((e) => {
         this.log.info("Fehler in der Verbindung!");
+        api.connect;
+
       });
-      this.log.info(api.connect);
+      //this.log.info(api.connect);
     });
 
     function httpGetJson(url) {
