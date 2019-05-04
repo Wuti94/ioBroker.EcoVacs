@@ -18,6 +18,7 @@ let password_hash = null;
 let vacbot = null;
 let country = null;
 let continent = null;
+var api = null;
 let device_id = EcoVacsAPI.md5(nodeMachineId.machineIdSync());
 
 class Template extends utils.Adapter {
@@ -40,40 +41,40 @@ class Template extends utils.Adapter {
 
   async onReady() {
 
-  //Daten aus der Config auslesen und einfügen
-  account_id = this.config.Benutzername;
-  password_hash = this.config.Passwort;
+    //Daten aus der Config auslesen und einfügen
+    account_id = this.config.Benutzername;
+    password_hash = this.config.Passwort;
 
-  //Pfad zu den States zusammengefasst!
-  AName = (AName + device_id);
-  this.log.debug(AName);
+    //Pfad zu den States zusammengefasst!
+    AName = (AName + device_id);
+    this.log.debug(AName);
 
-  // States erstellen (aktuell nur start und stop)
-  await this.setObjectAsync(device_id + '.start', {
-    type: 'state',
-    common: {
-      name: 'Saugen starten',
+    // States erstellen (aktuell nur start und stop)
+    await this.setObjectAsync(device_id + '.start', {
       type: 'state',
-      role: 'button',
-      read: true,
-      write: true,
-    },
-    native: {},
-  });
+      common: {
+        name: 'Saugen starten',
+        type: 'state',
+        role: 'button',
+        read: true,
+        write: true,
+      },
+      native: {},
+    });
 
-  await this.setObjectAsync(device_id + '.stop', {
-    type: 'state',
-    common: {
-      name: 'Saugen stoppen',
+    await this.setObjectAsync(device_id + '.stop', {
       type: 'state',
-      role: 'button',
-      read: true,
-      write: true,
-    },
-    native: {},
-  });
+      common: {
+        name: 'Saugen stoppen',
+        type: 'state',
+        role: 'button',
+        read: true,
+        write: true,
+      },
+      native: {},
+    });
 
-  //Country und Kontinent des Ortes werden automatisiert abgerufen!
+    //Country und Kontinent des Ortes werden automatisiert abgerufen!
     httpGetJson('http://ipinfo.io/json').then((json) => {
       country = json['country'].toLowerCase();
       continent = countries[country.toUpperCase()].continent.toLowerCase();
@@ -83,8 +84,8 @@ class Template extends utils.Adapter {
       this.log.debug("Kontinent: " + continent);
       this.log.debug("Benutzername/Email: " + account_id);
       this.log.debug("Passwort MD5 Hash: " + password_hash);
-
-      var api = new EcoVacsAPI(device_id, country, continent);
+      
+      api = new EcoVacsAPI(device_id, country, continent);
 
       //Verbindung herstellen mit Anmeldeinformationen
       api.connect(account_id, password_hash).then(() => {
@@ -93,21 +94,21 @@ class Template extends utils.Adapter {
         this.log.info("Fehler in der Verbindung!");
       });
 
-        api.devices().then((devices) => {
-          let vacuum = devices[0];
-          vacbot = new VacBot(api.uid, EcoVacsAPI.REALM, api.resource, api.user_access_token, vacuum, continent);
+      api.devices().then((devices) => {
+        let vacuum = devices[0];
+        vacbot = new VacBot(api.uid, EcoVacsAPI.REALM, api.resource, api.user_access_token, vacuum, continent);
 
-          //Sobald mit Staubsauger Verbunden!
-          vacbot.on("ready", (event) => {
-            this.log.info("Deebot ready!");
+        //Sobald mit Staubsauger Verbunden!
+        vacbot.on("ready", (event) => {
+          this.log.info("Deebot ready!");
 
-            //Event sobald sich der Batteriestatus ändert!
-            vacbot.on("BatteryInfo", (battery) => {
-              this.log.info("Battery level: " + battery * 100);
-            });
+          //Event sobald sich der Batteriestatus ändert!
+          vacbot.on("BatteryInfo", (battery) => {
+            this.log.info("Battery level: " + battery * 100);
           });
-          vacbot.connect_and_wait_until_ready();
         });
+        vacbot.connect_and_wait_until_ready();
+      });
 
       //this.log.info(api.connect);
     });
@@ -160,15 +161,15 @@ class Template extends utils.Adapter {
         this.log.info("Starte sauger!!");
         vacbot.run("clean");
       } else if (id === AName + ".stop"){
-          this.log.info("Stoppe sauger!!");
-          vacbot.run("stop");
-          vacbot.run("charge");
+        this.log.info("Stoppe sauger!!");
+        vacbot.run("stop");
+        vacbot.run("charge");
       }
     } else {
-        // The state was deleted
-        this.log.info(`state ${id} deleted`);
-      }
+      // The state was deleted
+      this.log.info(`state ${id} deleted`);
     }
+  }
 }
 
 if (module.parent) {
