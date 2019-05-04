@@ -85,11 +85,12 @@ class Template extends utils.Adapter {
       this.log.debug("Kontinent: " + continent);
       this.log.debug("Benutzername/Email: " + account_id);
       this.log.debug("Passwort MD5 Hash: " + password_hash);
+
+      api = new EcoVacsAPI(device_id, country, continent);
     });
 
       //Verbindung herstellen mit Anmeldeinformationen
       api.connect(account_id, password_hash).then(() => {
-        api = new EcoVacsAPI(device_id, country, continent);
         this.log.info("Verbunden!");
       }).catch((e) => {
         this.log.info("Fehler in der Verbindung!");
