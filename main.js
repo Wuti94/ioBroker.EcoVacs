@@ -15,6 +15,7 @@ var conn = false;
 let account_id = null;
 let password = null;
 let password_hash = null;
+let vacuum = null;
 let vacbot = null;
 let country = null;
 let continent = null;
@@ -84,18 +85,18 @@ class Template extends utils.Adapter {
       this.log.debug("Kontinent: " + continent);
       this.log.debug("Benutzername/Email: " + account_id);
       this.log.debug("Passwort MD5 Hash: " + password_hash);
-      
-      api = new EcoVacsAPI(device_id, country, continent);
+    });
 
       //Verbindung herstellen mit Anmeldeinformationen
       api.connect(account_id, password_hash).then(() => {
+        api = new EcoVacsAPI(device_id, country, continent);
         this.log.info("Verbunden!");
       }).catch((e) => {
         this.log.info("Fehler in der Verbindung!");
       });
 
       api.devices().then((devices) => {
-        let vacuum = devices[0];
+        vacuum = devices[0];
         vacbot = new VacBot(api.uid, EcoVacsAPI.REALM, api.resource, api.user_access_token, vacuum, continent);
 
         //Sobald mit Staubsauger Verbunden!
@@ -111,7 +112,7 @@ class Template extends utils.Adapter {
       });
 
       //this.log.info(api.connect);
-    });
+
 
     function httpGetJson(url) {
       return new Promise((resolve, reject) => {
