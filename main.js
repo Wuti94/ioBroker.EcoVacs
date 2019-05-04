@@ -88,39 +88,33 @@ class Template extends utils.Adapter {
 
       api = new EcoVacsAPI(device_id, country, continent);
 
-      api.connect(account_id, password_hash).then(() => {
-        this.log.info("Verbunden!");
-      }).catch((e) => {
-        this.log.info("Fehler in der Verbindung!");
-      });
-      
-    });
-
       //Verbindung herstellen mit Anmeldeinformationen
       api.connect(account_id, password_hash).then(() => {
         this.log.info("Verbunden!");
+
+        api.devices().then((devices) => {
+          vacuum = devices[0];
+          vacbot = new VacBot(api.uid, EcoVacsAPI.REALM, api.resource, api.user_access_token, vacuum, continent);
+
+          //Sobald mit Staubsauger Verbunden!
+          vacbot.on("ready", (event) => {
+            this.log.info("Deebot ready!");
+
+            //Event sobald sich der Batteriestatus ändert!
+            vacbot.on("BatteryInfo", (battery) => {
+              this.log.info("Battery level: " + battery * 100);
+            });
+          });
+          vacbot.connect_and_wait_until_ready();
+        });
+
       }).catch((e) => {
         this.log.info("Fehler in der Verbindung!");
       });
 
-      api.devices().then((devices) => {
-        vacuum = devices[0];
-        vacbot = new VacBot(api.uid, EcoVacsAPI.REALM, api.resource, api.user_access_token, vacuum, continent);
-
-        //Sobald mit Staubsauger Verbunden!
-        vacbot.on("ready", (event) => {
-          this.log.info("Deebot ready!");
-
-          //Event sobald sich der Batteriestatus ändert!
-          vacbot.on("BatteryInfo", (battery) => {
-            this.log.info("Battery level: " + battery * 100);
-          });
-        });
-        vacbot.connect_and_wait_until_ready();
-      });
+    });
 
       //this.log.info(api.connect);
-
 
     function httpGetJson(url) {
       return new Promise((resolve, reject) => {
