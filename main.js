@@ -88,6 +88,11 @@ class Template extends utils.Adapter {
 
       //Verbindung herstellen mit Anmeldeinformationen
       api.connect(account_id, password_hash).then(() => {
+        this.log.info("Verbunden!");
+      }).catch((e) => {
+        this.log.info("Fehler in der Verbindung!");
+      });
+
         api.devices().then((devices) => {
           let vacuum = devices[0];
           vacbot = new VacBot(api.uid, EcoVacsAPI.REALM, api.resource, api.user_access_token, vacuum, continent);
@@ -103,11 +108,7 @@ class Template extends utils.Adapter {
           });
           vacbot.connect_and_wait_until_ready();
         });
-      }).catch((e) => {
-        this.log.info("Fehler in der Verbindung!");
-        api.connect;
 
-      });
       //this.log.info(api.connect);
     });
 
