@@ -111,7 +111,7 @@ class Template extends utils.Adapter {
         this.log.info(api.connect);
       });
     };
-  };
+  )};
 
     function httpGetJson(url) {
       return new Promise((resolve, reject) => {
