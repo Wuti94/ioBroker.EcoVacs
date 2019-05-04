@@ -97,7 +97,6 @@ class Template extends utils.Adapter {
           vacbot.on("ready", (event) => {
             this.log.info("Deebot ready!");
             conn = true;
-
             //Event sobald sich der Batteriestatus ändert!
             vacbot.on("BatteryInfo", (battery) => {
               this.log.info("Battery level: " + battery * 100);
@@ -111,7 +110,7 @@ class Template extends utils.Adapter {
         this.log.info(api.connect);
       });
     };
-  )};
+    });
 
     function httpGetJson(url) {
       return new Promise((resolve, reject) => {
