@@ -96,7 +96,7 @@ class Template extends utils.Adapter {
           //Sobald mit Staubsauger Verbunden!
           vacbot.on("ready", (event) => {
             this.log.info("Deebot ready!");
-            
+
             //Event sobald sich der Batteriestatus ändert!
             vacbot.on("BatteryInfo", (battery) => {
               this.log.info("Battery level: " + battery * 100);
@@ -107,9 +107,8 @@ class Template extends utils.Adapter {
         });
       }).catch((e) => {
         this.log.info("Fehler in der Verbindung!");
-        this.log.info(api.connect);
       });
-
+      this.log.info(api.connect);
     });
 
     function httpGetJson(url) {
