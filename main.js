@@ -87,7 +87,7 @@ class Template extends utils.Adapter {
       var api = new EcoVacsAPI(device_id, country, continent);
 
       //Verbindung herstellen mit Anmeldeinformationen
-      while (conn == false){
+
       api.connect(account_id, password_hash).then(() => {
         api.devices().then((devices) => {
           let vacuum = devices[0];
@@ -96,7 +96,7 @@ class Template extends utils.Adapter {
           //Sobald mit Staubsauger Verbunden!
           vacbot.on("ready", (event) => {
             this.log.info("Deebot ready!");
-            conn = true;
+            
             //Event sobald sich der Batteriestatus ändert!
             vacbot.on("BatteryInfo", (battery) => {
               this.log.info("Battery level: " + battery * 100);
@@ -109,7 +109,7 @@ class Template extends utils.Adapter {
         this.log.info("Fehler in der Verbindung!");
         this.log.info(api.connect);
       });
-    };
+
     });
 
     function httpGetJson(url) {
