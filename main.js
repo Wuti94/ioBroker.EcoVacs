@@ -87,6 +87,13 @@ class Template extends utils.Adapter {
       this.log.debug("Passwort MD5 Hash: " + password_hash);
 
       api = new EcoVacsAPI(device_id, country, continent);
+
+      api.connect(account_id, password_hash).then(() => {
+        this.log.info("Verbunden!");
+      }).catch((e) => {
+        this.log.info("Fehler in der Verbindung!");
+      });
+      
     });
 
       //Verbindung herstellen mit Anmeldeinformationen
