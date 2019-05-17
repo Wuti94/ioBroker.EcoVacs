@@ -1,6 +1,6 @@
 EcoVacs
 
-Dies ist mein erster Adapte also entschuldigt bitte Anfängerfehler. Habe diesen Adapter mit meinem Deebot Slim 2 getestet und er funktioniert.
+Dies ist mein erster Adapter also entschuldigt bitte Anfängerfehler. Habe diesen Adapter mit meinem Deebot Slim 2 getestet und er funktioniert NICHT in der aktuellen Version.
 
 Nach der Installation bzw. Download des Adapters muss zuerst in der Config-Seite der Benutzername (Emailadresse) und ein MD5 Passwort-Hash Ihres Ecovacs-Kontos eingetragen werden.
 Ich habe diesen von dieser Seite (www.md5-generator.de) herstellen lassen und im Anschluss eingetragen.
