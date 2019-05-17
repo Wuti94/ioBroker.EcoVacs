@@ -89,7 +89,7 @@ class Template extends utils.Adapter {
       api = new EcoVacsAPI(device_id, country, continent);
 
       //Verbindung herstellen mit Anmeldeinformationen
-      while (conn = false){
+      while (conn == false){
       api.connect(account_id, password_hash).then(() => {
         this.log.info("Verbunden!");
 
